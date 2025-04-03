@@ -19,6 +19,12 @@ public:
     int getMes() ;
     int getAno() ;
 
+/*Solo le agregaría la de comparar:
+
+bool operator<(DtFecha& otra)
+
+Nico Palleiro*/
+
 //    void setDia(int d);
 //    void setMes(int m);
 //    void setAno(int a);
