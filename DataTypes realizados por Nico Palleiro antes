@@ -1,0 +1,218 @@
+/*
+
+DataTypes
+
+******************************************************************************************
+DtFecha.h
+******************************************************************************************
+#ifndef DTFECHA_H
+#define DTFECHA_H
+
+class DtFecha {
+private:
+    int dia;
+    int mes;
+    int anio;
+
+public:
+    DtFecha(int dia, int mes, int anio);
+    int getDia() const;
+    int getMes() const;
+    int getAnio() const;
+    bool esMenorQue(const DtFecha& otra) const;
+    ~DtFecha();
+};
+
+#endif
+
+******************************************************************************************
+DtFecha.cpp
+******************************************************************************************
+#include "DtFecha.h"
+
+DtFecha::DtFecha(int dia, int mes, int anio) : dia(dia), mes(mes), anio(anio) {}
+
+int DtFecha::getDia() const { return dia; }
+int DtFecha::getMes() const { return mes; }
+int DtFecha::getAnio() const { return anio; }
+
+bool DtFecha::esMenorQue(const DtFecha& otra) const {
+    if (anio < otra.anio) return true;
+    if (anio == otra.anio && mes < otra.mes) return true;
+    if (anio == otra.anio && mes == otra.mes && dia < otra.dia) return true;
+    return false;
+}
+
+DtFecha::~DtFecha() {}
+
+******************************************************************************************
+DtMascota.h
+******************************************************************************************
+#ifndef DTMASCOTA_H
+#define DTMASCOTA_H
+
+#include "Genero.h"
+#include <string>
+using namespace std;
+
+class DtMascota {
+protected:
+    string nombre;
+    Genero genero;
+    float peso;
+    float racionDiaria;
+
+public:
+    DtMascota(string nombre, Genero genero, float peso);
+    virtual ~DtMascota();
+    string getNombre() const;
+    Genero getGenero() const;
+    float getPeso() const;
+    float getRacionDiaria() const;
+    virtual void imprimir() const = 0;
+};
+
+#endif
+
+******************************************************************************************
+DtMascota.cpp
+******************************************************************************************
+#include "DtMascota.h"
+#include <iostream>
+
+DtMascota::DtMascota(string nombre, Genero genero, float peso)
+    : nombre(nombre), genero(genero), peso(peso), racionDiaria(0) {}
+
+DtMascota::~DtMascota() {}
+
+string DtMascota::getNombre() const { return nombre; }
+Genero DtMascota::getGenero() const { return genero; }
+float DtMascota::getPeso() const { return peso; }
+float DtMascota::getRacionDiaria() const { return racionDiaria; }
+
+******************************************************************************************
+DtPerro.h
+******************************************************************************************
+#ifndef DTPERRO_H
+#define DTPERRO_H
+
+#include "DtMascota.h"
+#include "RazaPerro.h"
+
+class DtPerro : public DtMascota {
+private:
+    RazaPerro raza;
+    bool vacunaCachorro;
+
+public:
+    DtPerro(string nombre, Genero genero, float peso, RazaPerro raza, bool vacunaCachorro);
+    ~DtPerro();
+    RazaPerro getRaza() const;
+    bool getVacunaCachorro() const;
+    void imprimir() const override;
+};
+
+#endif
+
+******************************************************************************************
+DtPerro.cpp
+******************************************************************************************
+#include "DtPerro.h"
+#include <iostream>
+
+DtPerro::DtPerro(string nombre, Genero genero, float peso, RazaPerro raza, bool vacunaCachorro)
+    : DtMascota(nombre, genero, peso), raza(raza), vacunaCachorro(vacunaCachorro) {}
+
+DtPerro::~DtPerro() {}
+
+RazaPerro DtPerro::getRaza() const { return raza; }
+bool DtPerro::getVacunaCachorro() const { return vacunaCachorro; }
+
+void DtPerro::imprimir() const {
+    cout << "Perro: " << nombre << " | Peso: " << peso << "kg | Raza: " << raza << " | Vacuna Cachorro: " << (vacunaCachorro ? "Sí" : "No") << endl;
+}
+
+******************************************************************************************
+DtGato.h
+******************************************************************************************
+#ifndef DTGATO_H
+#define DTGATO_H
+
+#include "DtMascota.h"
+#include "TipoPelo.h"
+
+class DtGato : public DtMascota {
+private:
+    TipoPelo tipoPelo;
+
+public:
+    DtGato(string nombre, Genero genero, float peso, TipoPelo tipoPelo);
+    ~DtGato();
+    TipoPelo getTipoPelo() const;
+    void imprimir() const override;
+};
+
+#endif
+
+******************************************************************************************
+DtGato.cpp
+******************************************************************************************
+#include "DtGato.h"
+#include <iostream>
+
+DtGato::DtGato(string nombre, Genero genero, float peso, TipoPelo tipoPelo)
+    : DtMascota(nombre, genero, peso), tipoPelo(tipoPelo) {}
+
+DtGato::~DtGato() {}
+
+TipoPelo DtGato::getTipoPelo() const { return tipoPelo; }
+
+void DtGato::imprimir() const {
+    cout << "Gato: " << nombre << " | Peso: " << peso << "kg | Tipo de Pelo: " << tipoPelo << endl;
+}
+
+******************************************************************************************
+DtConsulta.h
+******************************************************************************************
+#ifndef DTCONSULTA_H
+#define DTCONSULTA_H
+
+#include "DtFecha.h"
+#include <string>
+using namespace std;
+
+class DtConsulta {
+private:
+    DtFecha fechaConsulta;
+    string motivo;
+
+public:
+    DtConsulta(DtFecha fechaConsulta, string motivo);
+    ~DtConsulta();
+    DtFecha getFechaConsulta() const;
+    string getMotivo() const;
+    void imprimir() const;
+};
+
+#endif
+
+******************************************************************************************
+DtConsulta.cpp
+******************************************************************************************
+#include "DtConsulta.h"
+#include <iostream>
+
+DtConsulta::DtConsulta(DtFecha fechaConsulta, string motivo)
+    : fechaConsulta(fechaConsulta), motivo(motivo) {}
+
+DtConsulta::~DtConsulta() {}
+
+DtFecha DtConsulta::getFechaConsulta() const { return fechaConsulta; }
+string DtConsulta::getMotivo() const { return motivo; }
+
+void DtConsulta::imprimir() const {
+    cout << "Consulta: " << motivo << " | Fecha: " << fechaConsulta.getDia() << "/" 
+         << fechaConsulta.getMes() << "/" << fechaConsulta.getAnio() << endl;
+}
+
+*/
